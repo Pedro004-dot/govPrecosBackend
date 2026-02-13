@@ -52,6 +52,8 @@ import { TenantController } from './controllers/TenantController';
 import { createAuthRoutes } from './routes/auth.routes';
 import { createUserRoutes } from './routes/user.routes';
 import { createTenantRoutes } from './routes/tenant.routes';
+import { MunicipioController } from './controllers/MunicipioController';
+import { createMunicipioRoutes } from './routes/municipio.routes';
 
 const app = express();
 const PORT = process.env.PORT ?? 3001;
@@ -149,6 +151,7 @@ const tenantService = new TenantService(tenantRepository, auditService);
 const authController = new AuthController(authService, db);
 const userController = new UserController(userService);
 const tenantController = new TenantController(tenantService);
+const municipioController = new MunicipioController(municipioRepository);
 
 app.get('/api/health', async (_req: Request, res: Response) => {
   try {
@@ -197,6 +200,11 @@ app.use('/api/itens-licitacao', createItemLicitacaoFornecedorRoutes(fornecedorCo
 app.use('/api/auth', createAuthRoutes(authController));
 app.use('/api/users', createUserRoutes(userController));
 app.use('/api/tenants', createTenantRoutes(tenantController));
+
+// ============================================
+// ROTAS: Municípios (autocomplete para filtro geográfico)
+// ============================================
+app.use('/api/municipios', createMunicipioRoutes(municipioController));
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);

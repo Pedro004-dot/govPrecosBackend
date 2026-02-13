@@ -45,18 +45,20 @@ export class ItemService {
     limit: number = 50,
     offset: number = 0
   ): Promise<BuscarItensParaCotacaoResult> {
-    const fetchLimit = raioKm != null && raioKm > 0 ? Math.min(limit * 3, 500) : limit;
-    const rows = await this.itemRepository.searchByDescricaoWithLicitacao(q, fetchLimit, offset);
+    const usandoFiltroRegiao = latUsuario != null && lngUsuario != null && raioKm != null && raioKm > 0;
 
-    if (latUsuario == null || lngUsuario == null || raioKm == null || raioKm <= 0) {
-      const itens: ItemParaCotacao[] = rows.slice(0, limit).map((r) => ({
+    // Busca todos os resultados (sem limite)
+    const rows = await this.itemRepository.searchByDescricaoWithLicitacao(q, undefined, 0);
+
+    if (!usandoFiltroRegiao) {
+      const itens: ItemParaCotacao[] = rows.map((r) => ({
         item: r.item,
         municipioNome: r.municipioNome,
         ufSigla: r.ufSigla,
         numeroControlePNCP: r.numeroControlePNCP,
         dataLicitacao: r.dataLicitacao,
       }));
-      return { itens, total: itens.length, limit, offset };
+      return { itens, total: itens.length, limit: itens.length, offset: 0 };
     }
 
     const codigosUnicos = [...new Set(rows.map((r) => r.codigoIbge).filter(Boolean))] as string[];
@@ -66,24 +68,18 @@ export class ItemService {
     for (const row of rows) {
       const codigoIbge = row.codigoIbge;
       if (!codigoIbge) {
-        resultado.push({
-          item: row.item,
-          municipioNome: row.municipioNome,
-          ufSigla: row.ufSigla,
-          numeroControlePNCP: row.numeroControlePNCP,
-          dataLicitacao: row.dataLicitacao,
-        });
+        // Itens sem código IBGE são ignorados quando filtro de região está ativo
         continue;
       }
       const coords = coordsMap.get(codigoIbge);
       if (!coords) continue;
       const distanciaKm = calcularDistanciaKm(
-        latUsuario,
-        lngUsuario,
+        latUsuario!,
+        lngUsuario!,
         coords.latitude,
         coords.longitude
       );
-      if (distanciaKm > raioKm) continue;
+      if (distanciaKm > raioKm!) continue;
       resultado.push({
         item: row.item,
         distanciaKm: Math.round(distanciaKm * 100) / 100,
@@ -94,8 +90,10 @@ export class ItemService {
       });
     }
 
+    // Ordena por distância (mais próximo primeiro)
     resultado.sort((a, b) => (a.distanciaKm ?? 0) - (b.distanciaKm ?? 0));
-    const paginated = resultado.slice(0, limit);
-    return { itens: paginated, total: paginated.length, limit, offset };
+
+    // Retorna TODOS os resultados filtrados por região (sem paginação)
+    return { itens: resultado, total: resultado.length, limit: resultado.length, offset: 0 };
   }
 }

@@ -129,7 +129,7 @@ export class ItemLicitacaoRepository {
    */
   public async searchByDescricaoWithLicitacao(
     searchTerm: string,
-    limit: number = 100,
+    limit?: number,
     offset: number = 0
   ): Promise<
     Array<{
@@ -141,6 +141,8 @@ export class ItemLicitacaoRepository {
       dataLicitacao: string | null;
     }>
   > {
+    // Se limit for undefined, não aplica LIMIT (retorna todos)
+    const limitClause = limit != null ? `LIMIT ${limit}` : '';
     const query = `
       SELECT i.*,
         l.codigo_ibge AS licitacao_codigo_ibge,
@@ -152,9 +154,9 @@ export class ItemLicitacaoRepository {
       INNER JOIN licitacoes l ON l.id = i.licitacao_id
       WHERE to_tsvector('portuguese', i.descricao) @@ plainto_tsquery('portuguese', $1)
       ORDER BY ts_rank(to_tsvector('portuguese', i.descricao), plainto_tsquery('portuguese', $1)) DESC
-      LIMIT $2 OFFSET $3
+      ${limitClause} OFFSET $2
     `;
-    const rows = await this.db.query<any>(query, [searchTerm, limit, offset]);
+    const rows = await this.db.query<any>(query, [searchTerm, offset]);
     return rows.map((row: any) => ({
       item: this.mapRowToItemLicitacao(row),
       codigoIbge: row.licitacao_codigo_ibge ?? null,
