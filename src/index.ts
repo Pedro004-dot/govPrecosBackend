@@ -167,7 +167,7 @@ app.get('/api/health', async (_req: Request, res: Response) => {
   }
 });
 app.use(cors({
-  origin: 'https://gov-precos.vercel.app/',
+  origin: 'https://gov-precos.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
