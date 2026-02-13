@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import cors from 'cors';
 import { Database } from './infra/db';
 import { LicitacaoRepository } from './repositories/LicitacaoRepository';
 import { ItemLicitacaoRepository } from './repositories/ItemLicitacaoRepository';
@@ -165,7 +166,11 @@ app.get('/api/health', async (_req: Request, res: Response) => {
     });
   }
 });
-
+app.use(cors({
+  origin: 'https://gov-precos.vercel.app/',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use('/api/admin', createAdminRoutes(sincronizacaoController));
 app.use('/api/itens-licitacao', createItemRoutes(itemController)); // Renomeado para evitar conflito
 app.use(
