@@ -126,11 +126,13 @@ export class ItemLicitacaoRepository {
   /**
    * Busca textual com JOIN em licitacoes para obter codigo_ibge (filtro geográfico).
    * Retorna itens + dados da licitação (codigo_ibge, municipio_nome, uf_sigla).
+   * @param ufSigla Opcional: filtra por UF quando fornecido
    */
   public async searchByDescricaoWithLicitacao(
     searchTerm: string,
     limit?: number,
-    offset: number = 0
+    offset: number = 0,
+    ufSigla?: string
   ): Promise<
     Array<{
       item: ItemLicitacao;
@@ -143,6 +145,14 @@ export class ItemLicitacaoRepository {
   > {
     // Se limit for undefined, não aplica LIMIT (retorna todos)
     const limitClause = limit != null ? `LIMIT ${limit}` : '';
+    
+    // Adiciona filtro por UF se fornecido
+    const ufFilter = ufSigla ? `AND l.uf_sigla = $3` : '';
+    const params: any[] = [searchTerm, offset];
+    if (ufSigla) {
+      params.push(ufSigla);
+    }
+    
     const query = `
       SELECT i.*,
         l.codigo_ibge AS licitacao_codigo_ibge,
@@ -153,10 +163,11 @@ export class ItemLicitacaoRepository {
       FROM itens_licitacao i
       INNER JOIN licitacoes l ON l.id = i.licitacao_id
       WHERE to_tsvector('portuguese', i.descricao) @@ plainto_tsquery('portuguese', $1)
+        ${ufFilter}
       ORDER BY ts_rank(to_tsvector('portuguese', i.descricao), plainto_tsquery('portuguese', $1)) DESC
       ${limitClause} OFFSET $2
     `;
-    const rows = await this.db.query<any>(query, [searchTerm, offset]);
+    const rows = await this.db.query<any>(query, params);
     return rows.map((row: any) => ({
       item: this.mapRowToItemLicitacao(row),
       codigoIbge: row.licitacao_codigo_ibge ?? null,

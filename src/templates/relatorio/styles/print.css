@@ -1,0 +1,326 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PRINT.CSS - Regras @page e @media print para PDF
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Configuração da Página ─────────────────────────────────────── */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+/* Primeira página (capa) - sem cabeçalho/rodapé */
+@page :first {
+  margin: 0;
+}
+
+/* Páginas subsequentes - com margens para cabeçalho/rodapé */
+@page :not(:first) {
+  margin-top: 50px;
+  margin-bottom: 60px;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+/* ── Media Query para Impressão ─────────────────────────────────── */
+@media print {
+  /* Otimizações gerais para impressão */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Evita que elementos importantes quebrem */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Tabelas */
+  table {
+    page-break-inside: auto;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tfoot {
+    display: table-footer-group;
+  }
+
+  /* Imagens */
+  img {
+    page-break-inside: avoid;
+  }
+
+  /* Links - remover underline na impressão */
+  a {
+    text-decoration: none;
+  }
+
+  /* Remove elementos que não devem aparecer na impressão */
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* ── Cabeçalho e Rodapé ─────────────────────────────────────────── */
+
+/* Cabeçalho - aparece em todas as páginas exceto primeira */
+.page-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  z-index: 1000;
+  display: none; /* Oculto por padrão, Puppeteer vai gerenciar */
+}
+
+.header-bar {
+  width: 100%;
+  height: var(--header-height);
+  background-color: var(--navy-escuro);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 50px;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-brand {
+  font-size: 8pt;
+  font-weight: bold;
+  color: var(--branco);
+}
+
+.header-brand .light {
+  font-weight: normal;
+  color: #cce0ff;
+}
+
+.header-brasao {
+  height: 30px;
+  width: auto;
+}
+
+.header-projeto {
+  font-size: 7pt;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: right;
+  flex: 1;
+  margin-left: var(--spacing-md);
+}
+
+/* Rodapé - aparece em todas as páginas exceto primeira */
+.page-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--footer-height);
+  z-index: 1000;
+  display: none; /* Oculto por padrão, Puppeteer vai gerenciar */
+}
+
+.footer-separator {
+  width: calc(100% - 100px);
+  margin: 0 50px;
+  height: 0.5px;
+  background-color: var(--cinza-medio);
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 50px;
+}
+
+.footer-left {
+  font-size: 7.5pt;
+  color: var(--cinza);
+}
+
+.footer-center {
+  font-size: 7.5pt;
+  color: var(--cinza);
+  text-align: center;
+  flex: 1;
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-date {
+  font-size: 7.5pt;
+  color: var(--cinza);
+}
+
+.footer-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.qr-label {
+  font-size: 5.5pt;
+  color: var(--cinza);
+  margin-top: 2px;
+}
+
+/* ── Contador de Páginas (via JavaScript) ───────────────────────── */
+.page-number::before {
+  content: counter(page);
+}
+
+.total-pages::before {
+  content: counter(pages);
+}
+
+/* ── Capa (Primeira Página) ─────────────────────────────────────── */
+.capa {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  page-break-after: always;
+  break-after: always;
+}
+
+.capa-header {
+  width: 100%;
+  height: 130px;
+  background-color: var(--navy-escuro);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+}
+
+.capa-header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background-color: var(--azul-brand);
+}
+
+.capa-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background-color: var(--verde-check);
+}
+
+.capa-logo {
+  height: 80px;
+  width: auto;
+}
+
+.capa-brasao {
+  height: 70px;
+  width: auto;
+}
+
+.capa-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 70px;
+}
+
+.capa-title {
+  font-size: 22pt;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.capa-subtitle {
+  font-size: 10pt;
+  color: var(--cinza-escuro);
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.capa-divider {
+  width: 200px;
+  height: 1.5px;
+  background-color: var(--azul-brand);
+  margin: var(--spacing-lg) 0;
+}
+
+.capa-card {
+  width: 100%;
+  max-width: 500px;
+  background-color: var(--branco);
+  border: 1px solid var(--cinza-medio);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.capa-card-header {
+  background-color: var(--navy-escuro);
+  color: var(--branco);
+  padding: 10px 20px;
+  font-size: 10pt;
+  font-weight: bold;
+}
+
+.capa-card-body {
+  padding: 20px;
+}
+
+.capa-footer {
+  padding: 20px;
+  text-align: center;
+}
+
+.capa-footer-text {
+  font-size: 8pt;
+  color: var(--cinza);
+}
+
+/* ── Margens de Conteúdo (páginas internas) ─────────────────────── */
+.content-page {
+  padding-top: var(--spacing-md);
+}
+
+/* ── Evita elementos muito próximos do rodapé ───────────────────── */
+.content-page > *:last-child {
+  margin-bottom: var(--spacing-xl);
+}

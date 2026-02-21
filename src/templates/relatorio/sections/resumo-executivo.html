@@ -1,0 +1,87 @@
+{{!--
+  Seção: RESUMO EXECUTIVO
+  Visão geral do projeto com métricas principais
+--}}
+<div class="section content-page page-break-before">
+  <h2 class="section-title">RESUMO EXECUTIVO</h2>
+
+  <!-- Cards de métricas principais -->
+  <div class="grid grid-cols-2 gap-3 mb-4">
+    <!-- Total de Itens -->
+    <div class="summary-card no-break" style="--accent-color: var(--navy-escuro)">
+      <div class="summary-card-accent"></div>
+      <div class="summary-card-content">
+        <p class="summary-card-label">Total de Itens</p>
+        <p class="summary-card-value">{{resumo.totalItens}}</p>
+      </div>
+    </div>
+
+    <!-- Valor Total Estimado -->
+    <div class="summary-card no-break" style="--accent-color: var(--azul-brand)">
+      <div class="summary-card-accent"></div>
+      <div class="summary-card-content">
+        <p class="summary-card-label">Valor Total Estimado</p>
+        <p class="summary-card-value">R$ {{formatarMoeda resumo.valorTotalProjeto}}</p>
+      </div>
+    </div>
+
+    <!-- Itens Precificados -->
+    <div class="summary-card no-break" style="--accent-color: var(--navy-escuro)">
+      <div class="summary-card-accent"></div>
+      <div class="summary-card-content">
+        <p class="summary-card-label">Itens Precificados</p>
+        <p class="summary-card-value">{{resumo.itensComMediana}} de {{resumo.totalItens}}</p>
+      </div>
+    </div>
+
+    <!-- Total de Fontes PNCP -->
+    <div class="summary-card no-break" style="--accent-color: var(--verde-check)">
+      <div class="summary-card-accent"></div>
+      <div class="summary-card-content">
+        <p class="summary-card-label">Total de Fontes PNCP</p>
+        <p class="summary-card-value">{{resumo.totalFontes}}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Informações do Projeto -->
+  <h3 class="section-subtitle">Informações do Projeto</h3>
+
+  <div class="info-list">
+    <!-- Projeto -->
+    <div class="info-list-item">
+      <span class="info-list-label">Projeto:</span>
+      <span class="info-list-value">{{projeto.nome}}</span>
+    </div>
+
+    <!-- Número do processo (se disponível) -->
+    {{#if projeto.numeroProcesso}}
+      <div class="info-list-item">
+        <span class="info-list-label">Nº Processo:</span>
+        <span class="info-list-value">{{projeto.numeroProcesso}}</span>
+      </div>
+    {{/if}}
+
+    <!-- Objeto (se disponível) -->
+    {{#if projeto.objeto}}
+      <div class="info-list-item">
+        <span class="info-list-label">Objeto:</span>
+        <span class="info-list-value">{{projeto.objeto}}</span>
+      </div>
+    {{/if}}
+
+    <!-- Status -->
+    <div class="info-list-item">
+      <span class="info-list-label">Status:</span>
+      <span class="info-list-value">{{projeto.statusTraduzido}}</span>
+    </div>
+
+    <!-- Data de finalização (se disponível) -->
+    {{#if projeto.dataFinalizacaoFormatada}}
+      <div class="info-list-item">
+        <span class="info-list-label">Finalizado em:</span>
+        <span class="info-list-value">{{projeto.dataFinalizacaoFormatada}}</span>
+      </div>
+    {{/if}}
+  </div>
+</div>

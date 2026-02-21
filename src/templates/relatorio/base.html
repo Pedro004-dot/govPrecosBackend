@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{projeto.nome}} - Relatório de Pesquisa de Preços</title>
+
+  <!-- CSS Inline para compatibilidade com Puppeteer -->
+  <style>
+    /* ===== BASE CSS ===== */
+    {{{cssBase}}}
+
+    /* ===== LAYOUT CSS ===== */
+    {{{cssLayout}}}
+
+    /* ===== COMPONENTS CSS ===== */
+    {{{cssComponents}}}
+
+    /* ===== PRINT CSS ===== */
+    {{{cssPrint}}}
+
+    /* ===== CUSTOM STYLES (específicos da assinatura) ===== */
+    .signature-section {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .signature-box {
+      margin-bottom: 2.5rem;
+    }
+
+    .signature-line {
+      width: 100%;
+      border-top: 1px solid var(--cinza-escuro);
+      margin-bottom: 0.5rem;
+    }
+
+    .signature-info {
+      padding-left: 1rem;
+    }
+
+    .signature-label {
+      font-weight: bold;
+      font-size: 10pt;
+      color: var(--navy-escuro);
+      margin-bottom: 0.5rem;
+    }
+
+    .signature-details {
+      font-size: 9pt;
+      color: var(--cinza-escuro);
+      margin-bottom: 0.25rem;
+    }
+
+    .legal-notice {
+      background-color: var(--cinza-claro);
+      border: 1px solid var(--cinza-medio);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-md);
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .report-metadata {
+      margin-top: 2rem;
+      padding: var(--spacing-md);
+      background-color: var(--branco);
+      border: 1px solid var(--cinza-medio);
+      border-radius: var(--radius-sm);
+    }
+
+    .final-footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--cinza-medio);
+    }
+
+    /* Lista com marcadores */
+    .list-disc {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+    }
+
+    .list-disc li {
+      margin-bottom: 0.5rem;
+    }
+  </style>
+
+  <!-- Script para numeração de páginas (executado pelo Puppeteer) -->
+  <script>
+    // Este script será executado no contexto do Puppeteer
+    // para adicionar numeração dinâmica de páginas
+
+    // Função executada após o carregamento da página
+    window.addEventListener('DOMContentLoaded', () => {
+      // Puppeteer irá injetar os números de página via PDF options
+      console.log('Relatório carregado e pronto para conversão PDF');
+    });
+  </script>
+</head>
+<body>
+  <!-- Cabeçalho (aparece em todas as páginas exceto capa via CSS) -->
+  {{> cabecalho}}
+
+  <!-- Rodapé (aparece em todas as páginas exceto capa via CSS) -->
+  {{> rodape}}
+
+  <!-- Conteúdo do relatório (inserido dinamicamente) -->
+  {{{conteudo}}}
+</body>
+</html>

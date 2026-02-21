@@ -1,0 +1,27 @@
+{{!--
+  Template: RELATÓRIO COMPLETO
+  Inclui todas as seções: Capa, Resumo Executivo, Metodologia, Itens, Resumo Financeiro, Extrato de Fontes, Assinatura
+--}}
+
+{{!-- Capa (primeira página, sem cabeçalho/rodapé) --}}
+{{> sections/capa}}
+
+{{!-- Resumo Executivo --}}
+{{> sections/resumo-executivo}}
+
+{{!-- Metodologia (apenas no relatório completo) --}}
+{{> sections/metodologia}}
+
+{{!-- Itens (um por vez, com todas as fontes) --}}
+{{#each itensComFontes}}
+  {{> sections/item}}
+{{/each}}
+
+{{!-- Resumo Financeiro --}}
+{{> sections/resumo-financeiro}}
+
+{{!-- Extrato de Fontes (apenas no relatório completo) --}}
+{{> sections/extrato-fontes}}
+
+{{!-- Assinatura --}}
+{{> sections/assinatura}}

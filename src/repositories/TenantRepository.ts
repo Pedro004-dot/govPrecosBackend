@@ -95,6 +95,7 @@ export class TenantRepository {
       nome?: string;
       tipo?: TipoTenant;
       ativo?: boolean;
+      brasaoUrl?: string;
     }
   ): Promise<Tenant> {
     const updates: string[] = [];
@@ -114,6 +115,11 @@ export class TenantRepository {
     if (dados.ativo !== undefined) {
       updates.push(`ativo = $${paramIndex++}`);
       values.push(dados.ativo);
+    }
+
+    if (dados.brasaoUrl !== undefined) {
+      updates.push(`brasao_url = $${paramIndex++}`);
+      values.push(dados.brasaoUrl);
     }
 
     if (updates.length === 0) {

@@ -1,0 +1,96 @@
+{{!--
+  Seção: EXTRATO DE FONTES
+  Resumo consolidado de todas as fontes PNCP utilizadas
+  Aparece apenas no relatório COMPLETO
+--}}
+<div class="section content-page page-break-before">
+  <h2 class="section-title">EXTRATO DE FONTES (PNCP)</h2>
+
+  <!-- Introdução -->
+  <p class="text-dark mb-3" style="text-align: justify;">
+    Esta seção apresenta um resumo consolidado de todas as fontes de pesquisa utilizadas
+    neste relatório, extraídas do <strong>Portal Nacional de Contratações Públicas (PNCP)</strong>.
+    As informações detalhadas de cada fonte estão disponíveis nas seções de itens.
+  </p>
+
+  <!-- Resumo Quantitativo -->
+  <div class="bg-cinza-claro border rounded p-3 mb-4">
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <p class="text-muted" style="font-size: 9pt;">Total de Fontes Coletadas:</p>
+        <p class="font-bold text-navy" style="font-size: 14pt;">{{resumo.totalFontes}}</p>
+      </div>
+
+      <div>
+        <p class="text-muted" style="font-size: 9pt;">Fontes Utilizadas no Cálculo:</p>
+        <p class="font-bold text-brand" style="font-size: 14pt;">
+          {{calcularFontesUtilizadas itensComFontes}}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Distribuição por Estado -->
+  {{#if (gt resumo.totalFontes 0)}}
+    <h3 class="section-subtitle">Distribuição Geográfica das Fontes</h3>
+
+    <p class="text-muted mb-2" style="font-size: 9pt;">
+      As fontes foram coletadas de licitações realizadas pelos seguintes estados:
+    </p>
+
+    <div class="bg-branco border rounded p-3 mb-4">
+      <div class="grid grid-cols-4 gap-2">
+        {{#each distribuicaoEstados}}
+          <div class="text-center">
+            <p class="font-bold text-navy" style="font-size: 11pt;">{{uf}}</p>
+            <p class="text-muted" style="font-size: 8pt;">{{quantidade}} fonte(s)</p>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  {{/if}}
+
+  <!-- Observações Importantes -->
+  <h3 class="section-subtitle">Observações Importantes</h3>
+
+  <div class="bg-verde-check-bg border rounded p-3 mb-3" style="border-color: var(--verde-check);">
+    <p class="font-bold" style="font-size: 10pt; color: var(--verde-check); margin-bottom: 0.5rem;">
+      ✓ Fontes Oficiais
+    </p>
+    <p class="text-dark" style="font-size: 9pt; text-align: justify;">
+      Todas as fontes foram extraídas diretamente do PNCP, garantindo a autenticidade
+      e rastreabilidade das informações utilizadas na pesquisa de preços.
+    </p>
+  </div>
+
+  <div class="bg-cinza-claro border rounded p-3 mb-3">
+    <p class="font-bold" style="font-size: 10pt; color: var(--cinza-escuro); margin-bottom: 0.5rem;">
+      ℹ Exclusão de Fontes
+    </p>
+    <p class="text-dark" style="font-size: 9pt; text-align: justify;">
+      Algumas fontes podem ter sido excluídas do cálculo da mediana quando identificadas
+      como valores atípicos (outliers) ou incompatíveis. A justificativa para cada exclusão
+      está documentada nas seções de itens correspondentes.
+    </p>
+  </div>
+
+  <div class="bg-cinza-claro border rounded p-3">
+    <p class="font-bold" style="font-size: 10pt; color: var(--cinza-escuro); margin-bottom: 0.5rem;">
+      📅 Atualização dos Dados
+    </p>
+    <p class="text-dark" style="font-size: 9pt; text-align: justify;">
+      Os dados do PNCP são atualizados constantemente. Este relatório reflete o estado
+      das informações no momento de sua geração em <strong>{{dataGeracao}}</strong>.
+      Pesquisas futuras podem apresentar resultados diferentes devido à inclusão de
+      novas licitações no portal.
+    </p>
+  </div>
+
+  <!-- Acesso ao PNCP -->
+  <div class="mt-4">
+    <p class="text-muted" style="font-size: 9pt; text-align: justify;">
+      Para verificar as fontes ou realizar novas pesquisas, acesse o Portal Nacional
+      de Contratações Públicas em: <strong>https://pncp.gov.br</strong>
+    </p>
+  </div>
+</div>

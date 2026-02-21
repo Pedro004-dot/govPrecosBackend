@@ -2,19 +2,27 @@ import { Request, Response } from 'express';
 import { ProjetoRepository } from '../repositories/ProjetoRepository';
 import { ProjetoItemRepository } from '../repositories/ProjetoItemRepository';
 import { ProjetoValidacaoService } from '../services/ProjetoValidacaoService';
-import { ProjetoRelatorioService } from '../services/ProjetoRelatorioService';
+import { ProjetoRelatorioService, TipoRelatorio } from '../services/ProjetoRelatorioService';
+import { SupabaseStorageService } from '../services/SupabaseStorageService';
+import { RelatorioRepository } from '../repositories/RelatorioRepository';
 import { Projeto } from '../domain/Projeto';
+import crypto from 'crypto';
 
 /**
  * Controller para projetos de pesquisa de preços (Lei 14.133/2021).
  */
 export class ProjetoController {
+  private readonly storageService: SupabaseStorageService;
+
   constructor(
     private readonly projetoRepository: ProjetoRepository,
     private readonly itemRepository: ProjetoItemRepository,
     private readonly validacaoService: ProjetoValidacaoService,
-    private readonly relatorioService: ProjetoRelatorioService
-  ) {}
+    private readonly relatorioService: ProjetoRelatorioService,
+    private readonly relatorioRepository: RelatorioRepository
+  ) {
+    this.storageService = new SupabaseStorageService();
+  }
 
   /**
    * POST /api/projetos
@@ -338,14 +346,18 @@ export class ProjetoController {
   }
 
   /**
-   * POST /api/projetos/:id/relatorio
-   * Gera relatório PDF do projeto
+   * POST /api/projetos/:id/relatorio?tipo=completo|resumido|xlsx
+   * Gera relatório PDF ou XLSX do projeto
    * IMPORTANTE: Valida que o projeto pertence ao tenant do usuário
    */
   public async gerarRelatorio(req: Request, res: Response): Promise<void> {
     try {
       const usuario = req.usuario!;
       const id = req.params.id;
+      const tipoParam = (req.query.tipo as string) || 'completo';
+      const tipo: TipoRelatorio = ['completo', 'resumido', 'xlsx'].includes(tipoParam)
+        ? (tipoParam as TipoRelatorio)
+        : 'completo';
 
       const projeto = await this.projetoRepository.buscarPorId(id);
       if (!projeto) {
@@ -362,21 +374,75 @@ export class ProjetoController {
         return;
       }
 
-      // Gerar PDF
-      const pdfBuffer = await this.relatorioService.gerarPDF(id);
+      // Para PDF: gerar versão temporária, fazer upload para obter URL, depois regenerar com QR code
+      // Para XLSX: gerar direto e fazer upload
+      let buffer: Buffer;
+      let urlPublica: string | undefined;
 
-      // Configurar headers para download de PDF
-      res.setHeader('Content-Type', 'application/pdf');
+      if (tipo === 'xlsx') {
+        // XLSX não precisa de QR code, gerar e fazer upload direto
+        buffer = await this.relatorioService.gerarRelatorio(id, tipo);
+        try {
+          urlPublica = await this.storageService.uploadRelatorio(
+            id,
+            projeto.tenantId,
+            buffer,
+            tipo
+          );
+        } catch (storageError) {
+          console.error('[ProjetoController.gerarRelatorio] Erro no upload XLSX:', storageError);
+        }
+      } else {
+        // PDF: gerar versão temporária, upload, regenerar com QR code, upload final
+        try {
+          // 1. Gerar PDF temporário sem QR code
+          const bufferTemp = await this.relatorioService.gerarRelatorio(id, tipo);
+          
+          // 2. Fazer upload temporário para obter URL pública
+          urlPublica = await this.storageService.uploadRelatorio(
+            id,
+            projeto.tenantId,
+            bufferTemp,
+            tipo
+          );
+
+          // 3. Regenerar PDF COM QR code usando a URL pública
+          buffer = await this.relatorioService.gerarRelatorio(id, tipo, urlPublica);
+
+          // 4. Fazer upload final do PDF com QR code (sobrescrever o anterior)
+          urlPublica = await this.storageService.uploadRelatorio(
+            id,
+            projeto.tenantId,
+            buffer,
+            tipo
+          );
+        } catch (storageError) {
+          console.error('[ProjetoController.gerarRelatorio] Erro no upload PDF:', storageError);
+          // Se upload falhar, gerar PDF sem QR code
+          buffer = await this.relatorioService.gerarRelatorio(id, tipo);
+        }
+      }
+
+      // Não criar registro na tabela relatorios (ela tem FK para pesquisas_preco, não projetos)
+      // A tabela relatorios é do sistema antigo. Em futura versão, criar tabela projeto_relatorios se necessário
+
+      // Configurar headers para download
+      const extensao = tipo === 'xlsx' ? 'xlsx' : 'pdf';
+      const contentType = tipo === 'xlsx'
+        ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        : 'application/pdf';
+
+      res.setHeader('Content-Type', contentType);
       res.setHeader(
         'Content-Disposition',
-        `attachment; filename="Relatorio_${projeto.nome.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf"`
+        `attachment; filename="Relatorio_${projeto.nome.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.${extensao}"`
       );
-      res.setHeader('Content-Length', pdfBuffer.length);
+      res.setHeader('Content-Length', buffer.length);
 
-      // Enviar PDF
-      res.send(pdfBuffer);
+      // Enviar arquivo
+      res.send(buffer);
 
-      console.log(`[ProjetoController.gerarRelatorio] Relatório gerado para projeto: ${id}`);
+      console.log(`[ProjetoController.gerarRelatorio] Relatório ${tipo} gerado para projeto: ${id}${urlPublica ? ` (URL: ${urlPublica})` : ''}`);
     } catch (error) {
       console.error('[ProjetoController.gerarRelatorio] Erro:', error);
       const message = error instanceof Error ? error.message : 'Erro ao gerar relatório';

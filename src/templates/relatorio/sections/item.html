@@ -1,0 +1,152 @@
+{{!--
+  Seção: ITEM
+  Exibe cada item do projeto com suas fontes e estatísticas
+  Usado dentro de um loop #each itensComFontes
+--}}
+<div class="item-section no-break">
+  <!-- Título do item -->
+  <h3 class="font-bold text-navy" style="font-size: 15pt; margin-top: 2rem;">
+    ITEM: {{item.nome}}
+  </h3>
+
+  <div class="divider"></div>
+
+  <!-- Descrição (se disponível) -->
+  {{#if item.descricao}}
+    <p class="text-dark mb-2">
+      <strong>Descrição:</strong> {{item.descricao}}
+    </p>
+  {{/if}}
+
+  <!-- Quantidade -->
+  <p class="text-dark mb-2">
+    <strong>Quantidade:</strong> {{item.quantidade}} {{item.unidadeMedida}}
+  </p>
+
+  <!-- Informações sobre fontes -->
+  <p class="text-muted" style="font-size: 9pt; margin-bottom: 0.5rem;">
+    Fontes consideradas no cálculo: <strong>{{fontesNaoExcluidas.length}}</strong> de <strong>{{fontes.length}}</strong> (PNCP)
+  </p>
+
+  {{#if resumido}}
+    <p class="text-muted" style="font-size: 9pt; margin-bottom: 0.5rem;">
+      <em>Exibindo apenas as {{maxFontes}} principais fontes. Consulte o relatório completo para ver todas as fontes.</em>
+    </p>
+  {{/if}}
+
+  {{#if (gt item.percentualGlobal 0)}}
+    <p class="text-muted" style="font-size: 9pt; margin-bottom: 1rem;">
+      Participação do item no valor total estimado da cotação: <strong>{{item.percentualGlobal}}%</strong>
+    </p>
+  {{/if}}
+
+  <!-- Caixas de valor (se item tem mediana calculada) -->
+  {{#if item.medianaCalculada}}
+    <div class="grid grid-cols-2 gap-3 mb-3">
+      <!-- Preço Estimado (Mediana) -->
+      <div class="value-box" style="--accent-color: var(--navy-escuro)">
+        <div class="value-box-accent"></div>
+        <div style="padding-left: 12px;">
+          <p class="value-box-label">Preço Estimado (Mediana)</p>
+          <p class="value-box-value">R$ {{formatarMoeda item.medianaCalculada}}</p>
+        </div>
+      </div>
+
+      <!-- Valor Total Estimado -->
+      <div class="value-box" style="--accent-color: var(--azul-brand)">
+        <div class="value-box-accent"></div>
+        <div style="padding-left: 12px;">
+          <p class="value-box-label">Valor Total Estimado</p>
+          <p class="value-box-value">R$ {{formatarMoeda item.valorTotalItem}}</p>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+
+  <!-- Estatísticas das Fontes -->
+  {{#if estatisticas}}
+    <h4 class="section-subtitle">Estatísticas das Fontes</h4>
+
+    <div class="grid grid-cols-3 gap-2 mb-3">
+      <!-- Média -->
+      <div class="mini-card">
+        <p class="mini-card-label">Média</p>
+        <p class="mini-card-value" style="color: var(--navy-escuro)">
+          R$ {{formatarMoeda estatisticas.media}}
+        </p>
+      </div>
+
+      <!-- Mínimo -->
+      <div class="mini-card">
+        <p class="mini-card-label">Mínimo</p>
+        <p class="mini-card-value" style="color: var(--verde-check)">
+          R$ {{formatarMoeda estatisticas.minimo}}
+        </p>
+      </div>
+
+      <!-- Máximo -->
+      <div class="mini-card">
+        <p class="mini-card-label">Máximo</p>
+        <p class="mini-card-value" style="color: var(--cinza-escuro)">
+          R$ {{formatarMoeda estatisticas.maximo}}
+        </p>
+      </div>
+    </div>
+  {{/if}}
+
+  <!-- Tabela de Fontes de Pesquisa -->
+  <h4 class="section-subtitle">Fontes de Pesquisa (PNCP)</h4>
+
+  {{#if fontes.length}}
+    <table class="fontes-table">
+      <thead>
+        <tr>
+          <th style="width: 30px;">#</th>
+          <th style="width: 160px;">Órgão</th>
+          <th style="width: 100px;">Local</th>
+          <th style="width: 80px;">Valor Unit.</th>
+          <th style="width: 65px;">Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#eachWithIndex (limitArray fontes ../maxFontes)}}
+          <tr>
+            <td>{{../index}}</td>
+            <td>{{truncate razaoSocialOrgao 30}}</td>
+            <td>{{municipioNome}}-{{ufSigla}}</td>
+            <td>
+              R$ {{formatarMoeda valorUnitario}}{{#if ignoradoCalculo}} *{{/if}}
+            </td>
+            <td>{{#if dataLicitacao}}{{formatarData dataLicitacao}}{{else}}N/A{{/if}}</td>
+          </tr>
+        {{/eachWithIndex}}
+      </tbody>
+    </table>
+
+    <!-- Fontes Excluídas (se houver) -->
+    {{#if (gt (filter fontes 'ignoradoCalculo') 0)}}
+      <div class="mt-2">
+        <p class="font-bold" style="font-size: 10pt;">* Fontes Excluídas do Cálculo:</p>
+        {{#each fontes}}
+          {{#if ignoradoCalculo}}
+            <p class="text-muted" style="font-size: 9pt; margin-left: 10px;">
+              Fonte {{@index}}: {{justificativaExclusao}}
+            </p>
+          {{/if}}
+        {{/each}}
+      </div>
+    {{/if}}
+  {{else}}
+    <p class="text-muted" style="font-style: italic;">Nenhuma fonte adicionada.</p>
+  {{/if}}
+
+  <!-- Observações do item (se disponível) -->
+  {{#if item.observacoes}}
+    <div class="mt-3">
+      <p class="font-bold" style="font-size: 10pt;">Observações:</p>
+      <p class="text-dark" style="font-size: 9pt; text-align: justify;">
+        {{item.observacoes}}
+      </p>
+    </div>
+  {{/if}}
+</div>

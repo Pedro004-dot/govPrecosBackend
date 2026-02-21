@@ -1,0 +1,37 @@
+{{!--
+  Template: RELATÓRIO RESUMIDO
+  Exclui: Metodologia e Extrato de Fontes
+  Limita fontes por item: top 3 fontes apenas
+--}}
+
+{{!-- Capa (primeira página, sem cabeçalho/rodapé) --}}
+{{> sections/capa}}
+
+{{!-- Resumo Executivo --}}
+{{> sections/resumo-executivo}}
+
+{{!-- Aviso sobre relatório resumido --}}
+<div class="section content-page page-break-before">
+  <div class="bg-cinza-claro border rounded p-3">
+    <p class="font-bold" style="font-size: 10pt; color: var(--navy-escuro); margin-bottom: 0.5rem;">
+      ℹ Relatório Resumido
+    </p>
+    <p class="text-dark" style="font-size: 9pt; text-align: justify;">
+      Este é um <strong>relatório resumido</strong> que apresenta apenas as 3 principais fontes
+      de pesquisa para cada item. Para visualizar todas as fontes coletadas do PNCP, incluindo
+      a metodologia completa e o extrato detalhado, consulte o <strong>relatório completo</strong>.
+    </p>
+  </div>
+</div>
+
+{{!-- Itens (mostrando apenas top 3 fontes por item) --}}
+{{#each itensComFontes}}
+  {{!-- Passar flag resumido=true para limitar fontes exibidas --}}
+  {{> sections/item resumido=true maxFontes=3}}
+{{/each}}
+
+{{!-- Resumo Financeiro --}}
+{{> sections/resumo-financeiro}}
+
+{{!-- Assinatura --}}
+{{> sections/assinatura}}

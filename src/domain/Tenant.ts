@@ -14,7 +14,8 @@ export class Tenant {
     public readonly tipo: TipoTenant,
     public readonly ativo: boolean,
     public readonly criadoEm: Date,
-    public readonly atualizadoEm: Date
+    public readonly atualizadoEm: Date,
+    public readonly brasaoUrl?: string
   ) {}
 
   /**
@@ -50,6 +51,7 @@ export class Tenant {
       ativo: this.ativo,
       criadoEm: this.criadoEm,
       atualizadoEm: this.atualizadoEm,
+      brasaoUrl: this.brasaoUrl,
     };
   }
 
@@ -64,7 +66,8 @@ export class Tenant {
       row.tipo as TipoTenant,
       row.ativo ?? true,
       new Date(row.criado_em),
-      new Date(row.atualizado_em)
+      new Date(row.atualizado_em),
+      row.brasao_url || undefined
     );
   }
 }

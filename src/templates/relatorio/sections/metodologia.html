@@ -1,0 +1,130 @@
+{{!--
+  Seção: METODOLOGIA
+  Explicação da metodologia de pesquisa de preços
+  Aparece apenas no relatório COMPLETO
+--}}
+<div class="section content-page page-break-before">
+  <h2 class="section-title">METODOLOGIA</h2>
+
+  <!-- Base Legal -->
+  <h3 class="section-subtitle">Base Legal</h3>
+  <p class="text-dark mb-3" style="text-align: justify;">
+    Este relatório foi elaborado em conformidade com a
+    <strong>Lei nº 14.133/2021</strong> (Nova Lei de Licitações e Contratos Administrativos)
+    e a <strong>Instrução Normativa nº 65/2021</strong> da Secretaria de Gestão da Presidência
+    da República, que estabelecem os procedimentos para pesquisa de preços em contratações públicas.
+  </p>
+
+  <!-- Fonte de Dados -->
+  <h3 class="section-subtitle">Fonte de Dados</h3>
+  <p class="text-dark mb-3" style="text-align: justify;">
+    Os preços foram coletados exclusivamente do <strong>Portal Nacional de Contratações Públicas (PNCP)</strong>,
+    que centraliza informações sobre licitações e contratos administrativos de órgãos e entidades
+    da administração pública brasileira. O PNCP é a fonte oficial de dados prevista na legislação vigente.
+  </p>
+
+  <!-- Critérios de Seleção -->
+  <h3 class="section-subtitle">Critérios de Seleção de Fontes</h3>
+  <p class="text-dark mb-2" style="text-align: justify;">
+    Para cada item do projeto, foram coletadas fontes de pesquisa (licitações) que atendem aos seguintes critérios:
+  </p>
+
+  <ul class="list-disc" style="margin-left: 1.5rem; margin-bottom: 1rem;">
+    <li class="text-dark mb-1">
+      <strong>Compatibilidade do objeto:</strong> O item da licitação deve ser compatível com o item pesquisado
+      em termos de descrição, especificação técnica e unidade de medida.
+    </li>
+    <li class="text-dark mb-1">
+      <strong>Atualidade:</strong> Preferência por licitações mais recentes para refletir as condições
+      atuais de mercado.
+    </li>
+    <li class="text-dark mb-1">
+      <strong>Distribuição geográfica:</strong> Inclusão de fontes de diferentes localidades quando disponível,
+      para maior representatividade.
+    </li>
+    <li class="text-dark mb-1">
+      <strong>Quantidade mínima:</strong> Busca-se obter no mínimo 3 fontes por item para garantir
+      a representatividade estatística.
+    </li>
+  </ul>
+
+  <!-- Exclusão de Outliers -->
+  <h3 class="section-subtitle">Tratamento de Outliers</h3>
+  <p class="text-dark mb-3" style="text-align: justify;">
+    Fontes com valores discrepantes (outliers) podem ser excluídas do cálculo quando identificadas
+    como valores atípicos que não refletem as condições normais de mercado. A exclusão é justificada
+    individualmente para cada fonte, conforme indicado nas seções de itens deste relatório.
+  </p>
+
+  <!-- Cálculo do Preço Estimado -->
+  <h3 class="section-subtitle">Cálculo do Preço Estimado</h3>
+  <p class="text-dark mb-2" style="text-align: justify;">
+    O <strong>preço estimado</strong> de cada item é calculado utilizando a <strong>mediana</strong>
+    dos valores unitários das fontes consideradas (após exclusão de outliers, se aplicável).
+  </p>
+
+  <div class="bg-cinza-claro border rounded p-3 mb-3">
+    <p class="text-dark mb-2" style="font-size: 10pt;">
+      <strong>Por que usar a mediana?</strong>
+    </p>
+    <p class="text-muted" style="font-size: 9pt; text-align: justify;">
+      A mediana é uma medida estatística mais robusta que a média aritmética, pois é menos
+      sensível a valores extremos. Isso significa que um valor muito alto ou muito baixo
+      não afeta significativamente o preço estimado, resultando em valores mais representativos
+      da realidade de mercado.
+    </p>
+  </div>
+
+  <p class="text-dark mb-3" style="text-align: justify;">
+    Para cada item, o <strong>valor total estimado</strong> é obtido multiplicando o preço
+    estimado (mediana) pela quantidade solicitada.
+  </p>
+
+  <!-- Estatísticas Complementares -->
+  <h3 class="section-subtitle">Estatísticas Complementares</h3>
+  <p class="text-dark mb-3" style="text-align: justify;">
+    Além da mediana, são apresentadas estatísticas complementares para cada item:
+  </p>
+
+  <div class="grid grid-cols-3 gap-3 mb-3">
+    <div class="bg-cinza-claro border rounded p-2">
+      <p class="font-bold" style="font-size: 9pt; color: var(--navy-escuro);">Média</p>
+      <p class="text-muted" style="font-size: 8pt;">
+        Soma dos valores dividida pela quantidade de fontes
+      </p>
+    </div>
+
+    <div class="bg-cinza-claro border rounded p-2">
+      <p class="font-bold" style="font-size: 9pt; color: var(--verde-check);">Mínimo</p>
+      <p class="text-muted" style="font-size: 8pt;">
+        Menor valor unitário encontrado nas fontes
+      </p>
+    </div>
+
+    <div class="bg-cinza-claro border rounded p-2">
+      <p class="font-bold" style="font-size: 9pt; color: var(--cinza-escuro);">Máximo</p>
+      <p class="text-muted" style="font-size: 8pt;">
+        Maior valor unitário encontrado nas fontes
+      </p>
+    </div>
+  </div>
+
+  <!-- Transparência -->
+  <h3 class="section-subtitle">Transparência e Rastreabilidade</h3>
+  <p class="text-dark mb-2" style="text-align: justify;">
+    Todas as fontes utilizadas no cálculo são apresentadas detalhadamente nas seções de itens, incluindo:
+  </p>
+
+  <ul class="list-disc" style="margin-left: 1.5rem; margin-bottom: 1rem;">
+    <li class="text-dark mb-1">Razão social do órgão contratante</li>
+    <li class="text-dark mb-1">Localização (município e UF)</li>
+    <li class="text-dark mb-1">Valor unitário</li>
+    <li class="text-dark mb-1">Data da licitação</li>
+    <li class="text-dark mb-1">Indicação de exclusão do cálculo (quando aplicável)</li>
+  </ul>
+
+  <p class="text-dark" style="text-align: justify;">
+    Essa transparência permite a qualquer interessado verificar a origem dos preços e
+    a adequação da pesquisa realizada.
+  </p>
+</div>

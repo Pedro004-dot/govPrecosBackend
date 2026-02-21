@@ -1,0 +1,116 @@
+{{!--
+  Seção: ASSINATURA
+  Campos para assinaturas dos responsáveis e aviso legal
+  Aparece em todos os tipos de relatório (completo e resumido)
+--}}
+<div class="section content-page page-break-before">
+  <h2 class="section-title">ASSINATURAS</h2>
+
+  <!-- Campos de Assinatura -->
+  <div class="signature-section">
+    <!-- Assinatura 1: Responsável pela Pesquisa -->
+    <div class="signature-box no-break">
+      <div class="signature-line"></div>
+      <div class="signature-info">
+        <p class="signature-label">Responsável pela Pesquisa de Preços</p>
+        <p class="signature-details">Nome:</p>
+        <p class="signature-details">Cargo:</p>
+        <p class="signature-details">Matrícula:</p>
+      </div>
+    </div>
+
+    <!-- Assinatura 2: Responsável pela Análise -->
+    <div class="signature-box no-break">
+      <div class="signature-line"></div>
+      <div class="signature-info">
+        <p class="signature-label">Responsável pela Análise e Aprovação</p>
+        <p class="signature-details">Nome:</p>
+        <p class="signature-details">Cargo:</p>
+        <p class="signature-details">Matrícula:</p>
+      </div>
+    </div>
+
+    <!-- Assinatura 3: Autoridade Competente (opcional) -->
+    <div class="signature-box no-break">
+      <div class="signature-line"></div>
+      <div class="signature-info">
+        <p class="signature-label">Autoridade Competente</p>
+        <p class="signature-details">Nome:</p>
+        <p class="signature-details">Cargo:</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Aviso Legal -->
+  <div class="legal-notice no-break">
+    <h3 class="section-subtitle">Declaração de Responsabilidade</h3>
+
+    <p class="text-dark mb-2" style="font-size: 9pt; text-align: justify;">
+      Declaro(amos) que a pesquisa de preços constante neste relatório foi realizada
+      em conformidade com a <strong>Lei nº 14.133/2021</strong> e com a
+      <strong>Instrução Normativa nº 65/2021</strong> da Secretaria de Gestão
+      da Presidência da República, utilizando exclusivamente fontes oficiais do
+      Portal Nacional de Contratações Públicas (PNCP).
+    </p>
+
+    <p class="text-dark mb-2" style="font-size: 9pt; text-align: justify;">
+      Os valores estimados refletem as condições de mercado no momento da pesquisa
+      e foram calculados utilizando metodologia estatística baseada na mediana dos
+      preços coletados, conforme orientações técnicas vigentes.
+    </p>
+
+    <p class="text-dark" style="font-size: 9pt; text-align: justify;">
+      Este relatório tem caráter técnico e destina-se exclusivamente a subsidiar
+      o processo de contratação pública, não constituindo garantia de que os preços
+      praticados na contratação serão idênticos aos aqui estimados.
+    </p>
+  </div>
+
+  <!-- Informações Técnicas do Relatório -->
+  <div class="report-metadata no-break">
+    <div class="divider-thin"></div>
+
+    <div class="grid grid-cols-2 gap-2" style="margin-top: 1rem;">
+      <div>
+        <p class="text-muted" style="font-size: 8pt;">Data de Geração do Relatório:</p>
+        <p class="text-dark" style="font-size: 9pt; font-weight: bold;">{{dataGeracao}}</p>
+      </div>
+
+      {{#if projeto.dataFinalizacaoFormatada}}
+        <div>
+          <p class="text-muted" style="font-size: 8pt;">Data de Finalização do Projeto:</p>
+          <p class="text-dark" style="font-size: 9pt; font-weight: bold;">
+            {{projeto.dataFinalizacaoFormatada}}
+          </p>
+        </div>
+      {{/if}}
+    </div>
+
+    <div style="margin-top: 1rem;">
+      <p class="text-muted" style="font-size: 8pt;">Sistema Utilizado:</p>
+      <p class="text-dark" style="font-size: 9pt; font-weight: bold;">
+        GovPreços — Sistema de Pesquisa de Preços (PNCP)
+      </p>
+    </div>
+
+    {{#if urlPublicaRelatorio}}
+      <div style="margin-top: 1rem;">
+        <p class="text-muted" style="font-size: 8pt;">Acesso Online ao Relatório:</p>
+        <p class="text-dark" style="font-size: 9pt; font-family: monospace;">
+          {{urlPublicaRelatorio}}
+        </p>
+        <p class="text-muted" style="font-size: 7pt; margin-top: 0.25rem;">
+          (Ou utilize o QR Code no rodapé das páginas)
+        </p>
+      </div>
+    {{/if}}
+  </div>
+
+  <!-- Rodapé Final -->
+  <div class="final-footer">
+    <p class="text-center text-muted" style="font-size: 8pt; margin-top: 2rem;">
+      Este documento foi gerado eletronicamente pelo sistema GovPreços e contém {{resumo.totalItens}} item(ns)<br>
+      de pesquisa de preços, totalizando <strong>R$ {{formatarMoeda resumo.valorTotalProjeto}}</strong>.
+    </p>
+  </div>
+</div>

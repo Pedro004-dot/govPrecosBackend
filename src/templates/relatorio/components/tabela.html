@@ -1,0 +1,26 @@
+{{!--
+  Tabela Genérica
+  Tabela responsiva com cabeçalho e linhas zebradas
+
+  Parâmetros:
+  - headers: Array de strings com os cabeçalhos
+  - rows: Array de arrays com as linhas de dados
+--}}
+<table class="fontes-table">
+  <thead>
+    <tr>
+      {{#each headers}}
+        <th>{{this}}</th>
+      {{/each}}
+    </tr>
+  </thead>
+  <tbody>
+    {{#each rows}}
+      <tr>
+        {{#each this}}
+          <td>{{this}}</td>
+        {{/each}}
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

@@ -46,6 +46,8 @@ import { AuditService } from './services/AuditService';
 import { AuthService } from './services/AuthService';
 import { UserService } from './services/UserService';
 import { TenantService } from './services/TenantService';
+import { StorageService } from './services/StorageService';
+import { SupabaseService } from './infra/supabase';
 import { AuthController } from './controllers/AuthController';
 import { UserController } from './controllers/UserController';
 import { TenantController } from './controllers/TenantController';
@@ -90,6 +92,11 @@ const relatorioService = new RelatorioService(pesquisaPrecoRepository, relatorio
 const relatorioController = new RelatorioController(relatorioService);
 
 // ============================================
+// SISTEMA DE AUTENTICAÇÃO (parcial - tenantRepository necessário para projetos)
+// ============================================
+const tenantRepository = new TenantRepository(db);
+
+// ============================================
 // NOVO SISTEMA: Projetos (Lei 14.133/2021)
 // ============================================
 const projetoRepository = new ProjetoRepository(db);
@@ -104,13 +111,15 @@ const projetoValidacaoService = new ProjetoValidacaoService(
 const projetoRelatorioService = new ProjetoRelatorioService(
   projetoRepository,
   projetoItemRepository,
-  itemFonteRepository
+  itemFonteRepository,
+  tenantRepository
 );
 const projetoController = new ProjetoController(
   projetoRepository,
   projetoItemRepository,
   projetoValidacaoService,
-  projetoRelatorioService
+  projetoRelatorioService,
+  relatorioRepository
 );
 const projetoItemController = new ProjetoItemController(
   projetoItemRepository,
@@ -135,12 +144,13 @@ const fornecedorService = new FornecedorService(
 const fornecedorController = new FornecedorController(fornecedorService);
 
 // ============================================
-// SISTEMA DE AUTENTICAÇÃO
+// SISTEMA DE AUTENTICAÇÃO (restante)
 // ============================================
 const usuarioRepository = new UsuarioRepository(db);
 const passwordResetRepository = new PasswordResetRepository(db);
-const tenantRepository = new TenantRepository(db);
 const auditService = new AuditService(db);
+const supabaseService = SupabaseService.getInstance();
+const storageService = new StorageService(supabaseService);
 const authService = new AuthService(
   usuarioRepository,
   passwordResetRepository,
@@ -150,7 +160,7 @@ const userService = new UserService(usuarioRepository, auditService);
 const tenantService = new TenantService(tenantRepository, auditService);
 const authController = new AuthController(authService, db);
 const userController = new UserController(userService);
-const tenantController = new TenantController(tenantService);
+const tenantController = new TenantController(tenantService, storageService);
 const municipioController = new MunicipioController(municipioRepository);
 
 app.get('/api/health', async (_req: Request, res: Response) => {
@@ -206,11 +216,23 @@ app.use('/api/tenants', createTenantRoutes(tenantController));
 // ============================================
 app.use('/api/municipios', createMunicipioRoutes(municipioController));
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
+// Inicializar serviço de relatório (templates HTML) antes de aceitar requisições
+(async () => {
+  try {
+    await projetoRelatorioService.inicializar();
+  } catch (err) {
+    console.error('[startup] Falha ao inicializar ProjetoRelatorioService (PDF/XLSX):', err);
+    // Servidor sobe mesmo assim; geração de relatório falhará até templates estarem disponíveis
+  }
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando em http://localhost:${PORT}`);
+  });
+})();
 
 process.on('SIGTERM', async () => {
   console.log('Encerrando conexões...');
-  
+  try {
+    const { PuppeteerService } = await import('./services/PuppeteerService');
+    await PuppeteerService.getInstance().close();
+  } catch (_) {}
 });

@@ -1,0 +1,91 @@
+{{!--
+  Seção: CAPA
+  Primeira página do relatório
+  Contém logo, brasão, título, informações do projeto
+--}}
+<div class="capa">
+  <!-- Faixa de marca (header) -->
+  <div class="capa-header">
+    <!-- Logo GovPreços -->
+    {{#if logoSymbolDataUri}}
+      <img src="{{logoSymbolDataUri}}" alt="GovPreços" class="capa-logo">
+    {{/if}}
+
+    <!-- Brasão da prefeitura (se disponível) -->
+    {{#if brasaoUrl}}
+      <img src="{{brasaoUrl}}" alt="Brasão da Prefeitura" class="capa-brasao">
+    {{/if}}
+  </div>
+
+  <!-- Conteúdo principal da capa -->
+  <div class="capa-content">
+    <!-- Título do documento -->
+    <h1 class="capa-title text-navy">RELATÓRIO DE</h1>
+    <h1 class="capa-title text-brand">PESQUISA DE PREÇOS</h1>
+
+    <p class="capa-subtitle">Conforme Lei 14.133/2021 e IN nº 65/2021</p>
+
+    <!-- Linha decorativa -->
+    <div class="capa-divider"></div>
+
+    <!-- Card de identificação do projeto -->
+    <div class="capa-card">
+      <div class="capa-card-header">IDENTIFICAÇÃO DO PROJETO</div>
+      <div class="capa-card-body">
+        <!-- Projeto -->
+        <div class="info-list-item">
+          <span class="info-list-label">Projeto:</span>
+          <span class="info-list-value">{{projeto.nome}}</span>
+        </div>
+
+        <!-- Número do processo (se disponível) -->
+        {{#if projeto.numeroProcesso}}
+          <div class="info-list-item">
+            <span class="info-list-label">Nº Processo:</span>
+            <span class="info-list-value">{{projeto.numeroProcesso}}</span>
+          </div>
+        {{/if}}
+
+        <!-- Objeto (se disponível) -->
+        {{#if projeto.objeto}}
+          <div class="info-list-item">
+            <span class="info-list-label">Objeto:</span>
+            <span class="info-list-value">{{projeto.objeto}}</span>
+          </div>
+        {{/if}}
+
+        <div class="divider-thin"></div>
+
+        <!-- Status -->
+        <div class="info-list-item">
+          <span class="info-list-label">Status:</span>
+          <span class="info-list-value">{{projeto.statusTraduzido}}</span>
+        </div>
+
+        <!-- Data de finalização (se disponível) -->
+        {{#if projeto.dataFinalizacaoFormatada}}
+          <div class="info-list-item">
+            <span class="info-list-label">Finalizado em:</span>
+            <span class="info-list-value">{{projeto.dataFinalizacaoFormatada}}</span>
+          </div>
+        {{/if}}
+
+        <!-- Total de itens -->
+        <div class="info-list-item">
+          <span class="info-list-label">Total de Itens:</span>
+          <span class="info-list-value">{{resumo.totalItens}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rodapé da capa -->
+  <div class="capa-footer">
+    <p class="capa-footer-text">
+      Relatório gerado automaticamente em {{dataGeracao}}
+    </p>
+    <p class="capa-footer-text">
+      GovPreços — Portal Nacional de Contratações Públicas (PNCP)
+    </p>
+  </div>
+</div>

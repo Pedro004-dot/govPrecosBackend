@@ -12,7 +12,7 @@ export class ItemController {
   ) {}
 
   /**
-   * GET /api/itens/buscar?q=...&lat=...&lng=...&raioKm=...&limit=50&offset=0
+   * GET /api/itens/buscar?q=...&lat=...&lng=...&raioKm=...&ufSigla=...&limit=50&offset=0
    */
   public async buscar(req: Request, res: Response): Promise<void> {
     try {
@@ -25,6 +25,7 @@ export class ItemController {
       const lat = req.query.lat != null ? Number(req.query.lat) : undefined;
       const lng = req.query.lng != null ? Number(req.query.lng) : undefined;
       const raioKm = req.query.raioKm != null ? Number(req.query.raioKm) : undefined;
+      const ufSigla = req.query.ufSigla ? String(req.query.ufSigla).trim().toUpperCase() : undefined;
       const limit = Math.min(Number(req.query.limit) || 50, 100);
       const offset = Math.max(0, Number(req.query.offset) || 0);
 
@@ -34,7 +35,8 @@ export class ItemController {
         lng,
         raioKm,
         limit,
-        offset
+        offset,
+        ufSigla
       );
 
       res.status(200).json({
@@ -60,6 +62,26 @@ export class ItemController {
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Erro ao buscar itens';
+      res.status(500).json({ success: false, message });
+    }
+  }
+
+  /**
+   * GET /api/itens-licitacao/modelo-planilha
+   * Faz download do modelo de planilha Excel para importação de itens.
+   */
+  public async downloadModelo(req: Request, res: Response): Promise<void> {
+    try {
+      const buffer = this.planilhaService.gerarModelo();
+
+      // Configurar headers para download
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', 'attachment; filename="modelo-importacao-itens.xlsx"');
+      res.setHeader('Content-Length', buffer.length);
+
+      res.status(200).send(buffer);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Erro ao gerar modelo';
       res.status(500).json({ success: false, message });
     }
   }

@@ -73,6 +73,82 @@ export class PlanilhaCotacaoService {
   constructor(private readonly itemRepository: ItemLicitacaoRepository) {}
 
   /**
+   * Gera um modelo de planilha Excel para importação de itens.
+   * Retorna um Buffer do arquivo Excel com colunas pré-definidas e exemplos.
+   */
+  public gerarModelo(): Buffer {
+    // Criar workbook
+    const workbook = XLSX.utils.book_new();
+
+    // Dados do modelo com exemplos
+    const dados = [
+      // Cabeçalhos
+      ['Descrição do Item', 'Quantidade', 'Unidade de Medida'],
+      // Exemplos
+      ['Caneta esferográfica azul', '100', 'UN'],
+      ['Papel A4 sulfite branco', '50', 'RESMA'],
+      ['Grampeador de mesa médio', '10', 'UN'],
+      ['Clipes de papel nº 2', '20', 'CX'],
+      ['Caderno espiral 96 folhas', '30', 'UN'],
+    ];
+
+    // Criar planilha a partir dos dados
+    const worksheet = XLSX.utils.aoa_to_sheet(dados);
+
+    // Definir larguras das colunas
+    worksheet['!cols'] = [
+      { wch: 50 }, // Descrição do Item
+      { wch: 15 }, // Quantidade
+      { wch: 20 }, // Unidade de Medida
+    ];
+
+    // Adicionar planilha ao workbook
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Itens');
+
+    // Adicionar segunda aba com instruções
+    const instrucoes = [
+      ['INSTRUÇÕES PARA IMPORTAÇÃO DE ITENS'],
+      [''],
+      ['1. Preencha a aba "Itens" com seus dados'],
+      ['2. Colunas obrigatórias:'],
+      ['   - Descrição do Item: Nome/especificação do produto ou serviço'],
+      [''],
+      ['3. Colunas opcionais (mas recomendadas):'],
+      ['   - Quantidade: Quantidade numérica (exemplo: 10, 50, 100)'],
+      ['   - Unidade de Medida: UN, CX, RESMA, KG, L, M, etc.'],
+      [''],
+      ['4. Detecção automática de colunas:'],
+      ['   O sistema detecta automaticamente as colunas mesmo com nomes diferentes:'],
+      ['   - Descrição: aceita "Descrição", "Item", "Produto", "Especificação"'],
+      ['   - Quantidade: aceita "Quantidade", "Qtd", "Qtde"'],
+      ['   - Unidade: aceita "Unidade", "UM", "Unidade de Medida"'],
+      [''],
+      ['5. Limites:'],
+      ['   - Máximo 200 linhas por arquivo'],
+      ['   - Tamanho máximo do arquivo: 5MB'],
+      ['   - Formatos aceitos: .xlsx, .xls'],
+      [''],
+      ['6. Após importar:'],
+      ['   - O sistema buscará itens similares no histórico do PNCP'],
+      ['   - Você poderá revisar e aceitar as sugestões'],
+      ['   - Ou criar novos itens se necessário'],
+      [''],
+      ['7. Dicas:'],
+      ['   - Seja específico na descrição (marca, modelo, características)'],
+      ['   - Use descrições consistentes para facilitar a busca'],
+      ['   - Revise os dados antes de enviar'],
+    ];
+
+    const worksheetInstrucoes = XLSX.utils.aoa_to_sheet(instrucoes);
+    worksheetInstrucoes['!cols'] = [{ wch: 80 }];
+    XLSX.utils.book_append_sheet(workbook, worksheetInstrucoes, 'Instruções');
+
+    // Gerar buffer
+    const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+    return Buffer.from(buffer);
+  }
+
+  /**
    * Processa o buffer do Excel e retorna linhas com sugestões de matches (busca por descrição).
    */
   public async processar(buffer: Buffer): Promise<ResultadoUploadPlanilha> {

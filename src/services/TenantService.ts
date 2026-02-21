@@ -13,6 +13,7 @@ export interface UpdateTenantInput {
   nome?: string;
   tipo?: TipoTenant;
   ativo?: boolean;
+  brasaoUrl?: string;
 }
 
 /**

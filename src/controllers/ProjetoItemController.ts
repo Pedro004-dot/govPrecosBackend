@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import { ProjetoItemRepository } from '../repositories/ProjetoItemRepository';
-import { ItemFonteRepository } from '../repositories/ItemFonteRepository';
+import { ItemFonteRepository, ItemFonteDetalhada } from '../repositories/ItemFonteRepository';
 import { ProjetoRepository } from '../repositories/ProjetoRepository';
 import { ProjetoValidacaoService } from '../services/ProjetoValidacaoService';
 import { ProjetoItem } from '../domain/ProjetoItem';
+import { Fornecedor } from '../domain/Fornecedor';
 
 /**
  * Controller para itens de projeto e suas fontes PNCP.
@@ -149,7 +150,7 @@ export class ProjetoItemController {
       res.status(200).json({
         success: true,
         item: this.toJson(item),
-        fontes: fontes.map((fonte) => ({
+        fontes: fontes.map((fonte: ItemFonteDetalhada) => ({
           id: fonte.id,
           projetoItemId: fonte.projetoItemId,
           itemLicitacaoId: fonte.itemLicitacaoId,
@@ -167,6 +168,8 @@ export class ProjetoItemController {
           ufSigla: fonte.ufSigla,
           numeroCompra: fonte.numeroCompra,
           criadoEm: fonte.criadoEm,
+          // Fornecedor vencedor (quando já vinculado ao item de licitação)
+          fornecedor: fonte.fornecedor ? this.toJsonFornecedor(fonte.fornecedor) : undefined,
         })),
       });
     } catch (error) {
@@ -473,6 +476,42 @@ export class ProjetoItemController {
       observacoes: item.observacoes,
       criadoEm: item.criadoEm,
       atualizadoEm: item.atualizadoEm,
+    };
+  }
+
+  /**
+   * Serializa Fornecedor para JSON (mesmo formato do FornecedorController).
+   */
+  private toJsonFornecedor(f: Fornecedor) {
+    return {
+      id: f.id,
+      tenantId: f.tenantId,
+      cnpj: f.cnpj,
+      cnpjFormatado: f.getCnpjFormatado(),
+      tipoPessoa: f.tipoPessoa,
+      razaoSocial: f.razaoSocial,
+      nomeFantasia: f.nomeFantasia,
+      nomeExibicao: f.getNomeExibicao(),
+      porte: f.porte,
+      naturezaJuridica: f.naturezaJuridica,
+      situacao: f.situacao,
+      dataAbertura: f.dataAbertura,
+      logradouro: f.logradouro,
+      numero: f.numero,
+      complemento: f.complemento,
+      bairro: f.bairro,
+      municipio: f.municipio,
+      uf: f.uf,
+      cep: f.cep,
+      email: f.email,
+      telefone: f.telefone,
+      atividadePrincipal: f.atividadePrincipal,
+      atividadesSecundarias: f.atividadesSecundarias,
+      dadosCompletos: f.dadosCompletos,
+      isAtivo: f.isAtivo(),
+      ultimaAtualizacaoReceita: f.ultimaAtualizacaoReceita,
+      criadoEm: f.criadoEm,
+      atualizadoEm: f.atualizadoEm,
     };
   }
 }

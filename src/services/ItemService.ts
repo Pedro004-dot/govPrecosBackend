@@ -36,6 +36,7 @@ export class ItemService {
 
   /**
    * Busca itens por termo; se lat/lng/raioKm forem informados, filtra por distância.
+   * Se ufSigla for informado, filtra por UF.
    */
   public async buscarItensParaCotacao(
     q: string,
@@ -43,12 +44,13 @@ export class ItemService {
     lngUsuario?: number,
     raioKm?: number,
     limit: number = 50,
-    offset: number = 0
+    offset: number = 0,
+    ufSigla?: string
   ): Promise<BuscarItensParaCotacaoResult> {
     const usandoFiltroRegiao = latUsuario != null && lngUsuario != null && raioKm != null && raioKm > 0;
 
     // Busca todos os resultados (sem limite)
-    const rows = await this.itemRepository.searchByDescricaoWithLicitacao(q, undefined, 0);
+    const rows = await this.itemRepository.searchByDescricaoWithLicitacao(q, undefined, 0, ufSigla);
 
     if (!usandoFiltroRegiao) {
       const itens: ItemParaCotacao[] = rows.map((r) => ({

@@ -1,0 +1,136 @@
+/* ═══════════════════════════════════════════════════════════════════
+   BASE.CSS - Variáveis CSS e Reset Básico
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Paleta de Cores GovPreços ────────────────────────────────── */
+  --navy-escuro: #0A3D62;
+  --azul-brand: #4D8EFF;
+  --verde-check: #27AE60;
+  --verde-check-bg: rgba(39, 174, 96, 0.15);
+
+  --preto: #000000;
+  --cinza-escuro: #374151;
+  --cinza: #9ca3af;
+  --cinza-claro: #f3f4f6;
+  --cinza-medio: #e5e7eb;
+  --branco: #ffffff;
+
+  /* ── Layout e Dimensões ───────────────────────────────────────── */
+  --page-width: 210mm;        /* A4 */
+  --page-height: 297mm;
+  --margin: 50px;
+  --header-height: 42px;
+  --footer-height: 60px;
+
+  /* ── Tipografia ───────────────────────────────────────────────── */
+  --font-family: 'Helvetica', 'Arial', sans-serif;
+  --font-size-base: 10pt;
+  --font-size-small: 8.5pt;
+  --font-size-large: 12pt;
+  --font-size-xlarge: 15pt;
+  --font-size-title: 17pt;
+
+  /* ── Espaçamento ──────────────────────────────────────────────── */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* ── Raios de Borda ───────────────────────────────────────────── */
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+}
+
+/* ── Reset Básico ───────────────────────────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  color: var(--preto);
+  background-color: var(--branco);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ── Tipografia Base ────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-sm);
+}
+
+h1 { font-size: 22pt; }
+h2 { font-size: var(--font-size-title); }
+h3 { font-size: var(--font-size-large); }
+h4 { font-size: var(--font-size-base); }
+
+p {
+  margin-bottom: var(--spacing-sm);
+}
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+/* ── Links ──────────────────────────────────────────────────────── */
+a {
+  color: var(--azul-brand);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ── Imagens ────────────────────────────────────────────────────── */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── Utilitários de Texto ───────────────────────────────────────── */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+
+.font-bold { font-weight: bold; }
+.font-normal { font-weight: normal; }
+
+.text-navy { color: var(--navy-escuro); }
+.text-brand { color: var(--azul-brand); }
+.text-verde { color: var(--verde-check); }
+.text-muted { color: var(--cinza); }
+.text-dark { color: var(--cinza-escuro); }
+
+/* ── Utilitários de Espaçamento ─────────────────────────────────── */
+.mb-1 { margin-bottom: var(--spacing-xs); }
+.mb-2 { margin-bottom: var(--spacing-sm); }
+.mb-3 { margin-bottom: var(--spacing-md); }
+.mb-4 { margin-bottom: var(--spacing-lg); }
+.mb-5 { margin-bottom: var(--spacing-xl); }
+
+.mt-1 { margin-top: var(--spacing-xs); }
+.mt-2 { margin-top: var(--spacing-sm); }
+.mt-3 { margin-top: var(--spacing-md); }
+.mt-4 { margin-top: var(--spacing-lg); }
+.mt-5 { margin-top: var(--spacing-xl); }

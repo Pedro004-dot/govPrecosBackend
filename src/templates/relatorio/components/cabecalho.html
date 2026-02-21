@@ -1,0 +1,25 @@
+{{!--
+  Cabeçalho do Relatório
+  Aparece em todas as páginas exceto a capa
+--}}
+<header class="page-header">
+  <div class="header-bar">
+    <!-- Logo e marca -->
+    <div class="header-logo">
+      {{#if logoBrancoDataUri}}
+        <img src="{{logoBrancoDataUri}}" alt="GovPreços" height="20">
+      {{/if}}
+      <span class="header-brand">
+        GOV<span class="light">PREÇOS</span>
+      </span>
+    </div>
+
+    <!-- Brasão da prefeitura (se disponível) -->
+    {{#if brasaoUrl}}
+      <img src="{{brasaoUrl}}" alt="Brasão" class="header-brasao">
+    {{/if}}
+
+    <!-- Nome do projeto -->
+    <p class="header-projeto">{{projeto.nome}}</p>
+  </div>
+</header>

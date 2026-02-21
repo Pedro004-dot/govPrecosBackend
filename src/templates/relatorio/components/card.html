@@ -1,0 +1,16 @@
+{{!--
+  Card de Resumo
+  Exibe métricas principais do relatório com acento colorido lateral
+
+  Parâmetros:
+  - titulo: Título do card
+  - valor: Valor a ser exibido
+  - cor: Cor do acento lateral (CSS variable)
+--}}
+<div class="summary-card no-break" style="--accent-color: {{cor}}">
+  <div class="summary-card-accent"></div>
+  <div class="summary-card-content">
+    <p class="summary-card-label">{{titulo}}</p>
+    <p class="summary-card-value">{{valor}}</p>
+  </div>
+</div>

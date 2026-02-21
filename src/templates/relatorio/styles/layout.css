@@ -1,0 +1,207 @@
+/* ═══════════════════════════════════════════════════════════════════
+   LAYOUT.CSS - Grid, Margens, Flexbox, Page Breaks
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Container Principal ────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* ── Flexbox Utilitários ────────────────────────────────────────── */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.gap-1 { gap: var(--spacing-xs); }
+.gap-2 { gap: var(--spacing-sm); }
+.gap-3 { gap: var(--spacing-md); }
+.gap-4 { gap: var(--spacing-lg); }
+.gap-5 { gap: var(--spacing-xl); }
+
+.flex-1 { flex: 1; }
+.flex-auto { flex: auto; }
+.flex-none { flex: none; }
+
+.shrink-0 { flex-shrink: 0; }
+
+/* ── Grid ───────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* ── Width e Height ─────────────────────────────────────────────── */
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+
+.w-auto { width: auto; }
+.h-auto { height: auto; }
+
+/* ── Padding ────────────────────────────────────────────────────── */
+.p-0 { padding: 0; }
+.p-1 { padding: var(--spacing-xs); }
+.p-2 { padding: var(--spacing-sm); }
+.p-3 { padding: var(--spacing-md); }
+.p-4 { padding: var(--spacing-lg); }
+.p-5 { padding: var(--spacing-xl); }
+
+.px-1 { padding-left: var(--spacing-xs); padding-right: var(--spacing-xs); }
+.px-2 { padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
+.px-3 { padding-left: var(--spacing-md); padding-right: var(--spacing-md); }
+.px-4 { padding-left: var(--spacing-lg); padding-right: var(--spacing-lg); }
+.px-5 { padding-left: var(--spacing-xl); padding-right: var(--spacing-xl); }
+
+.py-1 { padding-top: var(--spacing-xs); padding-bottom: var(--spacing-xs); }
+.py-2 { padding-top: var(--spacing-sm); padding-bottom: var(--spacing-sm); }
+.py-3 { padding-top: var(--spacing-md); padding-bottom: var(--spacing-md); }
+.py-4 { padding-top: var(--spacing-lg); padding-bottom: var(--spacing-lg); }
+.py-5 { padding-top: var(--spacing-xl); padding-bottom: var(--spacing-xl); }
+
+/* ── Page Break Control ─────────────────────────────────────────── */
+
+/* Evita quebra de página dentro do elemento */
+.no-break,
+.page-break-avoid {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Força quebra de página ANTES do elemento */
+.page-break-before {
+  page-break-before: always;
+  break-before: always;
+}
+
+/* Força quebra de página DEPOIS do elemento */
+.page-break-after {
+  page-break-after: always;
+  break-after: always;
+}
+
+/* Permite quebra automática (padrão) */
+.page-break-auto {
+  page-break-inside: auto;
+  break-inside: auto;
+}
+
+/* Evita elemento órfão (primeira linha de parágrafo sozinha) */
+.avoid-orphans {
+  orphans: 3;
+  widows: 3;
+}
+
+/* ── Seções do Relatório (cada seção inicia em nova página) ──────*/
+.section {
+  width: 100%;
+}
+
+.section:not(:first-child) {
+  page-break-before: always;
+  break-before: always;
+}
+
+/* Capa nunca tem quebra antes */
+.section-capa {
+  page-break-before: avoid;
+  break-before: avoid;
+}
+
+/* Item do relatório - evita quebrar no meio */
+.item-section {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Se item for muito grande, permite quebra mas evita órfãos */
+.item-section.allow-break {
+  page-break-inside: auto;
+  break-inside: auto;
+  orphans: 3;
+  widows: 3;
+}
+
+/* ── Display ────────────────────────────────────────────────────── */
+.block { display: block; }
+.inline-block { display: inline-block; }
+.inline { display: inline; }
+.hidden { display: none; }
+
+/* ── Position ───────────────────────────────────────────────────── */
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+
+/* ── Overflow ───────────────────────────────────────────────────── */
+.overflow-hidden { overflow: hidden; }
+.overflow-auto { overflow: auto; }
+
+/* ── Border Radius ──────────────────────────────────────────────── */
+.rounded { border-radius: var(--radius-md); }
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-full { border-radius: 9999px; }
+
+/* ── Shadow ─────────────────────────────────────────────────────── */
+.shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.shadow {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}

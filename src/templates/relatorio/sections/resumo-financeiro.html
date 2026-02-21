@@ -1,0 +1,65 @@
+{{!--
+  Seção: RESUMO FINANCEIRO
+  Tabela com todos os itens e valor total estimado
+--}}
+<div class="section content-page page-break-before">
+  <h2 class="section-title">RESUMO FINANCEIRO</h2>
+
+  <!-- Tabela de itens -->
+  <table class="fontes-table">
+    <thead>
+      <tr>
+        <th style="width: 30px;">#</th>
+        <th style="width: 220px;">Item</th>
+        <th style="width: 60px;">Qtd</th>
+        <th style="width: 80px;">Unit.</th>
+        <th style="width: 85px;">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#eachWithIndex itens}}
+        {{#with this}}
+          <tr>
+            <td>{{../index}}</td>
+            <td>{{truncate nome 40}}</td>
+            <td>{{quantidade}} {{unidadeMedida}}</td>
+            <td>R$ {{formatarMoeda medianaCalculada}}</td>
+            <td>R$ {{formatarMoeda (multiply medianaCalculada quantidade)}}</td>
+          </tr>
+        {{/with}}
+      {{/eachWithIndex}}
+    </tbody>
+  </table>
+
+  <!-- Totalizador -->
+  <div class="no-break" style="margin-top: 1.5rem;">
+    <div class="bg-cinza border rounded p-3">
+      <!-- Total de itens -->
+      <div class="flex justify-between mb-2">
+        <span class="text-muted" style="font-size: 10pt;">Total de Itens:</span>
+        <span class="font-bold" style="font-size: 10pt;">{{resumo.totalItens}}</span>
+      </div>
+
+      <!-- Itens precificados -->
+      <div class="flex justify-between mb-2">
+        <span class="text-muted" style="font-size: 10pt;">Itens Precificados:</span>
+        <span class="font-bold" style="font-size: 10pt;">
+          {{resumo.itensComMediana}} de {{resumo.totalItens}}
+        </span>
+      </div>
+
+      <!-- Divisor -->
+      <div class="divider-thin"></div>
+
+      <!-- Valor total estimado -->
+      <div class="flex justify-between items-center" style="margin-top: 0.75rem;">
+        <span class="font-bold" style="font-size: 11pt; color: var(--cinza-escuro);">
+          VALOR TOTAL ESTIMADO:
+        </span>
+        <span class="font-bold text-brand" style="font-size: 17pt;">
+          R$ {{formatarMoeda resumo.valorTotalProjeto}}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

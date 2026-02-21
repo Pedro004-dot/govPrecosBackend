@@ -1,0 +1,31 @@
+{{!--
+  Rodapé do Relatório
+  Aparece em todas as páginas exceto a capa
+  Inclui sistema de paginação e QR code (se disponível)
+--}}
+<footer class="page-footer">
+  <div class="footer-separator"></div>
+  <div class="footer-content">
+    <!-- Esquerda: nome do sistema -->
+    <p class="footer-left">GovPreços — Sistema de Pesquisa de Preços (PNCP)</p>
+
+    <!-- Centro: numeração de páginas -->
+    <p class="footer-center">
+      Página <span class="page-number"></span> de <span class="total-pages"></span>
+    </p>
+
+    <!-- Direita: QR code ou data -->
+    <div class="footer-right">
+      {{#if qrCodeDataUrl}}
+        <!-- QR Code para acessar online -->
+        <div class="footer-qr">
+          <img src="{{qrCodeDataUrl}}" alt="QR Code" width="35" height="35">
+          <p class="qr-label">Acesse online</p>
+        </div>
+      {{else}}
+        <!-- Data de geração (fallback) -->
+        <p class="footer-date">Gerado em {{dataGeracao}}</p>
+      {{/if}}
+    </div>
+  </div>
+</footer>
